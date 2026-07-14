@@ -66,8 +66,8 @@ void kernel_panic(const char* primary_reason, const char* secondary_reason) {
     asm volatile (
         "cli\n\t"    // Clear interrupts so the timer can't wake it
         "1:\n\t"
-        "hlt\n\t"    // Halt execution
-        "jmp 1b"     // Absolute fall-back loop
+        "hlt\n\t"    // Halt Execution 
+        "jmp 1b"     // loops
     );
 }
 
