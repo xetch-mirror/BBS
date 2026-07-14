@@ -578,4 +578,29 @@ extern wchar_t **_wenviron;
 
 #ifndef __STRICT_ANSI__
   long long  __cdecl wtoll (const wchar_t *);
-  char *__cdecl lltoa (long l
+  char *__cdecl lltoa (long long, char *, int);
+  char *__cdecl ulltoa (unsigned long long , char *, int);
+  wchar_t *__cdecl lltow (long long, wchar_t *, int);
+  wchar_t *__cdecl ulltow (unsigned long long, wchar_t *, int);
+
+  /* __CRT_INLINE using non-ansi functions */
+  __CRT_INLINE long long  __cdecl atoll (const char * _c) { return _atoi64 (_c); }
+  __CRT_INLINE char *__cdecl lltoa (long long _n, char * _c, int _i) { return _i64toa (_n, _c, _i); }
+  __CRT_INLINE char *__cdecl ulltoa (unsigned long long _n, char * _c, int _i) { return _ui64toa (_n, _c, _i); }
+  __CRT_INLINE long long  __cdecl wtoll (const wchar_t * _w) { return _wtoi64 (_w); }
+  __CRT_INLINE wchar_t *__cdecl lltow (long long _n, wchar_t * _w, int _i) { return _i64tow (_n, _w, _i); }
+  __CRT_INLINE wchar_t *__cdecl ulltow (unsigned long long _n, wchar_t * _w, int _i) { return _ui64tow (_n, _w, _i); }
+#endif /* (__STRICT_ANSI__)  */
+
+#endif /* !__NO_ISOCEXT */
+
+#ifdef __cplusplus
+}
+#endif
+
+#pragma pack(pop)
+
+#include <sec_api/stdlib_s.h>
+#include <malloc.h>
+
+#endif
