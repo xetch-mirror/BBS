@@ -7,5 +7,5 @@ int _isctype(int c, int type) {
 
 void __main() {
     // MinGW/Win32 targets often look for an internal __main setup routine.
-    // You can leave this completely empty.
+    // leave this empty, DO NOT DO ANYTHING
 }
