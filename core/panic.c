@@ -1,6 +1,6 @@
 #include "panic_config.h"
 
-// Your custom OS global pointer to the active graphics VRAM memory address
+// custom OS global pointer to the active graphics VRAM memory address
 extern uint32_t* system_frame_buffer; 
 
 // Your built-in 8x8 font bitmap (each char is 8 bytes, 1 byte per horizontal row)
