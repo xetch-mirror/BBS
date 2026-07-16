@@ -4,7 +4,7 @@
 // argument.h
 // this is part of the Xlibary, everyone can use it
 
-// Provided by your kernel's environment / linker
+// Provided by kernel's environment / linker
 extern void kernel_print(const char* s);
 extern void kernel_exit(int code);
 
