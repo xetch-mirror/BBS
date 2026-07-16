@@ -3,7 +3,7 @@
 // custom OS global pointer to the active graphics VRAM memory address
 extern uint32_t* system_frame_buffer; 
 
-// Your built-in 8x8 font bitmap (each char is 8 bytes, 1 byte per horizontal row)
+// built-in 8x8 font bitmap (each char is 8 bytes, 1 byte per horizontal row)
 extern const uint8_t basic_font_8x8[128][8];
 
 // Draw a solid color block over the active graphics screen
