@@ -1,0 +1,123 @@
+#ifndef MINIPHONE_H
+#define MINIPHONE_H
+
+#include "xstring.h"
+
+#define MAX_VARS 32
+#define MAX_NAME_LEN 32
+
+// Storage entry for a variable or constant
+typedef struct {
+    char name[MAX_NAME_LEN];
+    int value;
+    int is_constant;
+} MphSymbol;
+
+typedef struct {
+    MphSymbol symbols[MAX_VARS];
+    int symbol_count;
+} MphContext;
+
+// Helper to find a token value or dynamic variable lookup
+static inline int mph_get_symbol(MphContext *ctx, const char *name, int *out_val) {
+    for (int i = 0; i < ctx->symbol_count; i++) {
+        // Using structural comparison matching your custom string rules
+        int match = 1;
+        int j = 0;
+        while (name[j] != '\0' || ctx->symbols[i].name[j] != '\0') {
+            if (name[j] != ctx->symbols[i].name[j]) {
+                match = 0;
+                break;
+            }
+            j++;
+        }
+        if (match) {
+            *out_val = ctx->symbols[i].value;
+            return 1; // Found!
+        }
+    }
+    return 0; // Not found
+}
+
+// Minimal line-by-line interpreter loop
+static inline void mph_interpret_line(MphContext *ctx, const char *line, void* (*ramdisk_lookup)(const char*)) {
+    // Basic tokenizer offsets
+    char token1[MAX_NAME_LEN] = {0};
+    char token2[MAX_NAME_LEN] = {0};
+    char token3[MAX_NAME_LEN] = {0};
+    
+    // Simple naive parser separating words by spaces
+    int idx = 0, t = 0;
+    while (line[idx] == ' ' || line[idx] == '\t') idx++; // skip padding
+    
+    // Extract Token 1
+    while (line[idx] != ' ' && line[idx] != '\0' && t < MAX_NAME_LEN - 1) {
+        token1[t++] = line[idx++];
+    }
+    token1[t] = '\0';
+    
+    while (line[idx] == ' ') idx++;
+    t = 0;
+    
+    // Extract Token 2
+    while (line[idx] != ' ' && line[idx] != '\0' && t < MAX_NAME_LEN - 1) {
+        token2[t++] = line[idx++];
+    }
+    token2[t] = '\0';
+
+    while (line[idx] == ' ') idx++;
+    t = 0;
+    
+    // Extract Token 3
+    while (line[idx] != ' ' && line[idx] != '\0' && line[idx] != '\n' && t < MAX_NAME_LEN - 1) {
+        token3[t++] = line[idx++];
+    }
+    token3[t] = '\0';
+
+    // 1. The Explicit INCLUDE Handler
+    // Usage: include config.mph
+    if (token1[0] == 'i' && token1[1] == 'n' && token1[2] == 'c' && token1[3] == 'l' && token1[4] == 'u' && token1[5] == 'd' && token1[6] == 'e') {
+        if (ramdisk_lookup != NULL && token2[0] != '\0') {
+            const char* file_bytes = (const char*)ramdisk_lookup(token2);
+            if (file_bytes != NULL) {
+                // We mock parsing the file stream line by line if loaded from memory
+                // (You can loop lines here to recursively evaluate header statements)
+            }
+        }
+        return;
+    }
+
+    // 2. Variable and Constant Definitions
+    // Usage: let x = 42   OR  const MAX = 100
+    int is_let = (token1[0] == 'l' && token1[1] == 'e' && token1[2] == 't');
+    int is_const = (token1[0] == 'c' && token1[1] == 'o' && token1[2] == 'n' && token1[3] == 's' && token1[4] == 't');
+
+    if ((is_let || is_const) && ctx->symbol_count < MAX_VARS) {
+        MphSymbol *sym = &ctx->symbols[ctx->symbol_count];
+        
+        // Copy target token string into structural name slot
+        int c_idx = 0;
+        while (token2[c_idx] != '\0' && c_idx < MAX_NAME_LEN - 1) {
+            sym->name[c_idx] = token2[c_idx];
+            c_idx++;
+        }
+        sym->name[c_idx] = '\0';
+        
+        // Convert the target assignment number string to integer value
+        int parsed_val = 0;
+        int sign = 1;
+        int n_idx = 0;
+        if (token3[0] == '-') { sign = -1; n_idx++; }
+        while (token3[n_idx] >= '0' && token3[n_idx] <= '9') {
+            parsed_val = parsed_val * 10 + (token3[n_idx] - '0');
+            n_idx++;
+        }
+        
+        sym->value = parsed_val * sign;
+        sym->is_constant = is_const;
+        ctx->symbol_count++;
+        return;
+    }
+}
+
+#endif // MINIPHONE_H
