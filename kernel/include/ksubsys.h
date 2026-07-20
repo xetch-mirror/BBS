@@ -1,12 +1,12 @@
 #ifndef KSUBSYS_H
 #define KSUBSYS_H
 
-// Subsystem identifier structure
+// subsystem identifier structure
 typedef struct {
     const char *tag; // e.g., "serio", "rtc_cmos", "clocksource"
 } ksubsys_t;
 
-// Pre-declared common kernel subsystems
+// pre-declared common kernel subsystems
 #define DEFINE_SUBSYS(name, tag_str) static const ksubsys_t name = { tag_str }
 
 DEFINE_SUBSYS(LOG_SERIO, "serio");
