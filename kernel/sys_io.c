@@ -1,4 +1,4 @@
-#include "kernel/include/k_ioport.h"
+#include "kernel/include/k_ioports.h"
 
 void outb(uint16_t port, uint8_t val) {
     __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
