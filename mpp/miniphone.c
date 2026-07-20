@@ -71,7 +71,7 @@ void mph_execute_script(MphContext *ctx, const char *filename, void* (*ramdisk_l
  */
 void mph_dump_symbols(MphContext *ctx) {
     char num_buf[32];
-    serial_write("--- MiniPhone Active Environment Symbol Matrix ---\n");
+    serial_write("--- MP BULID FOR BBS ---\n");
     
     for (int i = 0; i < ctx->symbol_count; i++) {
         if (ctx->symbols[i].is_constant) {
