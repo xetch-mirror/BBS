@@ -1,5 +1,5 @@
-#include "io.h"
-#include "iso646.h"
+#include "Clib/io.h"
+#include "Clib/iso646.h"
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -29,12 +29,12 @@ const char kbd_us[128] = {
 char bbs_get_char(void) {
     uint8_t scancode = bbs_keyboard_get_scancode();
 
-    // 1. Ignore key release events (when bit 7 is set)
+    // 1. ignore key release events (when bit 7 is set)
     if (scancode & 0x80) {
         return 0; 
     }
 
-    // 2. Prevent array index out of bounds
+    // 2. prevent array index out of bounds
     if (scancode >= 128) {
         return 0;
     }
@@ -47,7 +47,7 @@ void bbs_simple_shell(void) {
     volatile char *vga = (volatile char*)0xB8000;
     int cursor = 0;
 
-    // Clear screen first so it's clean
+    // clear screen first so it's clean
     for (int i = 0; i < VGA_LIMIT * 2; i += 2) {
         vga[i] = ' ';
         vga[i + 1] = 0x07;
@@ -56,27 +56,27 @@ void bbs_simple_shell(void) {
     while (1) {
         char c = bbs_get_char();
         if (c != 0) {
-            // Check for Backspace
+            // check for backspace
             if (c == '\b' and cursor > 0) {
                 cursor--;
                 vga[cursor * 2] = ' ';
                 vga[cursor * 2 + 1] = 0x07;
             } 
-            // Check for Enter/Newline
+            // check for Enter/Newline
             else if (c == '\n') {
-                // Move cursor to the start of the next line
+                // move cursor to the start of the next line
                 cursor = ((cursor / VGA_WIDTH) + 1) * VGA_WIDTH;
             } 
-            // Regular printable character
+            // regular printable character
             else if (c != '\b' and cursor < VGA_LIMIT) {
                 vga[cursor * 2] = c;
                 vga[cursor * 2 + 1] = 0x0F; // Bright white text
                 cursor++;
             }
             
-            // Screen roll-over safety
+            // screen roll-over safety
             if (cursor >= VGA_LIMIT) {
-                cursor = 0; // Wrap back to the top for now
+                cursor = 0; // wrap back to the top for now
             }
         }
     }
