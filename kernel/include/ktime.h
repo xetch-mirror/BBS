@@ -1,7 +1,7 @@
 #ifndef KTIME_H
 #define KTIME_H
 
-#include "Clib/Xbool.h"
+#include "Clib/Xlibary/Xbool.h"
 
 typedef struct {
     unsigned int seconds;
