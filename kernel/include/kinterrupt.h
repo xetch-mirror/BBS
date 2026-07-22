@@ -1,7 +1,7 @@
 #ifndef KINTERRUPT_H
 #define KINTERRUPT_H
 
-#include "Xbool.h"
+#include "Clib/Xbool.h"
 
 // CPU register frame saved by interrupt wrapper
 typedef struct {
