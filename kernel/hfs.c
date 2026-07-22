@@ -43,7 +43,7 @@ void fhs_init(void) {
 
     // we use boomerang 
     fhs_initialized = XTRUE;
-    io_print("[fhs] Layout established. Hierarchy locked.\n");
+    io_print("[fhs] launched directory tree driver (VFS)\n");
 }
 
 xbool fhs_is_ready(void) {
