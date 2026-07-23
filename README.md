@@ -1,4 +1,7 @@
+![BBS.png](https://github.com/user-attachments/assets/aed4c515-b9fc-449d-af64-46713cb6ca92)
 
+# BBS OS
+## THE BOLD OPERATING SYSTEM
 
 
 ![C](https://img.shields.io/badge/Language-C-blue?logo=c&logoColor=white)
