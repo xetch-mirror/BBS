@@ -1,20 +1,24 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stdbool.h>
+#include "Clib/Xlibary/xbool.h"
+#include "Clib/Xlibary/xio.h"
+#include "Clib/Xlibary/xstring.h"
+
+typedef unsigned char  uint8_t;
+typedef unsigned short uint16_t;
+typedef unsigned int   uint32_t;
 
 #define ICMP_PAYLOAD_SIZE 56
 
 typedef struct __attribute__((packed)) {
-    uint8_t  type;         // 8 = Echo Request, 0 = Echo Reply
-    uint8_t  code;         // 0
-    uint16_t checksum;     // ICMP Checksum
-    uint16_t id;           // Process / Session ID
-    uint16_t sequence;     // Packet Sequence Number
-    uint8_t  payload[ICMP_PAYLOAD_SIZE]; // 56 bytes of dummy or timestamp data
+    uint8_t  type;
+    uint8_t  code;
+    uint16_t checksum;
+    uint16_t id;
+    uint16_t sequence;
+    uint8_t  payload[ICMP_PAYLOAD_SIZE];
 } icmp_packet_64_t;
 
 bool parse_ip(const char *str, uint8_t ip_out[4]) {
-    int bytes[4] = {0};
+    int bytes[4] = {0, 0, 0, 0};
     int byte_idx = 0, digits = 0;
 
     while (*str) {
@@ -39,23 +43,41 @@ bool parse_ip(const char *str, uint8_t ip_out[4]) {
     return true;
 }
 
+static void print_ip(const uint8_t ip[4]) {
+    char num[12];
+    kernel_print(print(ip[0], num, 10));
+    kernel_print(".");
+    kernel_print(print(ip[1], num, 10));
+    kernel_print(".");
+    kernel_print(print(ip[2], num, 10));
+    kernel_print(".");
+    kernel_print(print(ip[3], num, 10));
+}
+
 int main(int argc, char *argv[]) {
+    char num_buf[12];
+
     if (argc < 2) {
-        printf("Usage: ping <ip_address>\n");
+        kernel_print("Usage: ping <ip_address>\n");
         return 1;
     }
 
     uint8_t target_ip[4];
     if (!parse_ip(argv[1], target_ip)) {
-        printf("ping: invalid IP address '%s'\n", argv[1]);
+        kernel_print("ping: invalid IP address '");
+        kernel_print(argv[1]);
+        kernel_print("'\n");
         return 1;
     }
 
-    printf("PING %d.%d.%d.%d: %d data bytes\n", 
-           target_ip[0], target_ip[1], target_ip[2], target_ip[3], ICMP_PAYLOAD_SIZE);
+    kernel_print("PING ");
+    print_ip(target_ip);
+    kernel_print(": ");
+    kernel_print(print(ICMP_PAYLOAD_SIZE, num_buf, 10));
+    kernel_print(" data bytes\n");
 
     icmp_packet_64_t packet;
-    packet.type = 8; // Echo Request
+    packet.type = 8;
     packet.code = 0;
     packet.id = 0x1234;
     packet.sequence = 1;
@@ -64,13 +86,18 @@ int main(int argc, char *argv[]) {
         packet.payload[i] = (uint8_t)(i & 0xFF);
     }
 
-    // DAEMON LINK
     uint8_t reply_ttl = 64;
-    uint32_t rtt_ms = 2; // Round-trip time calculated by system timer
-    
-    printf("64 bytes from %d.%d.%d.%d: icmp_seq=%d ttl=%d time=%d ms\n",
-           target_ip[0], target_ip[1], target_ip[2], target_ip[3],
-           packet.sequence, reply_ttl, rtt_ms);
+    uint32_t rtt_ms = 2;
+
+    kernel_print("64 bytes from ");
+    print_ip(target_ip);
+    kernel_print(": icmp_seq=");
+    kernel_print(print(packet.sequence, num_buf, 10));
+    kernel_print(" ttl=");
+    kernel_print(print(reply_ttl, num_buf, 10));
+    kernel_print(" time=");
+    kernel_print(print(rtt_ms, num_buf, 10));
+    kernel_print(" ms\n");
 
     return 0;
 }
