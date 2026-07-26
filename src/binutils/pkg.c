@@ -16,7 +16,7 @@ static pkg_meta_t pkg_db[MAX_PACKAGES];
 static uint32_t pkg_count = 0;
 
 void pkg_init(void) {
-    // Seed default package directly into /usr/bin/
+    // seed default package directly into /usr/bin/
     k_strncpy(pkg_db[0].name, "mininano", 32);
     k_strncpy(pkg_db[0].version, "1.0.0", 16);
     k_strncpy(pkg_db[0].binary_path, "/usr/bin/mininano", 64);
