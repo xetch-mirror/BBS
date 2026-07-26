@@ -1,5 +1,4 @@
-#include "Clib/io.h"
-#include "Clib/iso646.h"
+#include "kernel/include/kio_ports.h"
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
@@ -13,10 +12,10 @@ typedef unsigned short uint16_t;
 #define VGA_LIMIT (VGA_WIDTH * VGA_HEIGHT)
 
 uint8_t bbs_keyboard_get_scancode(void) {
-    while (not (_inp(KB_STATUS_PORT) and KB_STATUS_MASK)) {
+    while (!(inb(KB_STATUS_PORT) & KB_STATUS_MASK)) {
         __asm__ __volatile__("pause"); 
     }
-    return _inp(KB_DATA_PORT);
+    return inb(KB_DATA_PORT);
 }
 
 const char kbd_us[128] = {
@@ -57,7 +56,7 @@ void bbs_simple_shell(void) {
         char c = bbs_get_char();
         if (c != 0) {
             // check for backspace
-            if (c == '\b' and cursor > 0) {
+            if (c == '\b' && cursor > 0) {
                 cursor--;
                 vga[cursor * 2] = ' ';
                 vga[cursor * 2 + 1] = 0x07;
@@ -68,7 +67,7 @@ void bbs_simple_shell(void) {
                 cursor = ((cursor / VGA_WIDTH) + 1) * VGA_WIDTH;
             } 
             // regular printable character
-            else if (c != '\b' and cursor < VGA_LIMIT) {
+            else if (c != '\b' && cursor < VGA_LIMIT) {
                 vga[cursor * 2] = c;
                 vga[cursor * 2 + 1] = 0x0F; // Bright white text
                 cursor++;

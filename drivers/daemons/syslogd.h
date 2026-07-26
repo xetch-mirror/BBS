@@ -1,13 +1,14 @@
 #ifndef SYSLOGD_H
 #define SYSLOGD_H
 
-#include "kernel/include/sys_types.h"
+#include "sys_types.h"
 
 // Log severity levels
 #define LOG_INFO    0
 #define LOG_WARN    1
 #define LOG_ERROR   2
 #define LOG_DEBUG   3
+#define LOG_ERR     LOG_ERROR
 
 typedef struct {
     uint8_t level;

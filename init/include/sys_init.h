@@ -6,6 +6,7 @@
 typedef enum {
     BOOT_STAGE_EARLY = 0,
     BOOT_STAGE_DRIVERS,
+    BOOT_STAGE_HEADERS,
     BOOT_STAGE_INIT,
     BOOT_STAGE_RUNNING
 } boot_stage_t;

@@ -1,7 +1,9 @@
 #ifndef DECOMPRESSOR_H
 #define DECOMPRESSOR_H
 
-#include "init/sys_types.h"
+#include <stddef.h>
+#include <stdint.h>
+#include "sys_types.h"
 
 #define DECOMPRESS_SUCCESS          0
 #define DECOMPRESS_ERR_NULL_PTR    -1

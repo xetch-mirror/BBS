@@ -14,5 +14,6 @@ DEFINE_SUBSYS(LOG_INPUT, "input");
 DEFINE_SUBSYS(LOG_RTC,   "rtc_cmos");
 DEFINE_SUBSYS(LOG_CLOCK, "clocksource");
 DEFINE_SUBSYS(LOG_NET,   "NET");
+DEFINE_SUBSYS(LOG_DISK,  "disk");
 
 #endif // KSUBSYS_H

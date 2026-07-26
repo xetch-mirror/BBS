@@ -1,7 +1,7 @@
 #ifndef SYS_IPC_H
 #define SYS_IPC_H
 
-#include "init/sys_types.h"
+#include "sys_types.h"
 
 #define IPC_MAX_PAYLOAD 256
 #define IPC_ANY_SENDER  0xFFFFFFFF

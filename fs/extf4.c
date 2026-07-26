@@ -11,9 +11,6 @@
 #include <string.h>
 #include <limits.h>
 
-#include <ext4.h>
-#include <ext4_blockdev.h>
-
 extern void serial_write(const char *str);
 extern void serial_write_hex(uint64_t value);
 

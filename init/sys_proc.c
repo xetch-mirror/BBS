@@ -1,4 +1,15 @@
-// sys_proc.c
+#include "include/sys_types.h"
+
+#define MAX_TASKS 32
+#define STACK_SIZE 4096
+#define TASK_UNUSED TASK_DEAD
+
+typedef struct {
+    uint32_t stack[STACK_SIZE];
+    uint32_t esp;
+    task_state_t state;
+} task_t;
+
 task_t tasks[MAX_TASKS];
 int current_task = 0; // 0
 task_id_t sys_create_task(void (*entry)(void), uint32_t prio) {

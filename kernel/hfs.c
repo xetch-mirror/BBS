@@ -1,8 +1,8 @@
-#include "fs/vfs.h"
+#include "vfs.h"
 #include "Clib/Xlibary/Xbool.h"
 #include "init/include/sys_io.h"
 
-static xbool fhs_initialized = XFALSE;
+static xbool fhs_initialized = x_false;
 
 void fhs_init(void) {
     // safety
@@ -42,7 +42,7 @@ void fhs_init(void) {
     vfs_mkdir("/var/tmp");
 
     // we use boomerang 
-    fhs_initialized = XTRUE;
+    fhs_initialized = x_true;
     io_print("[fhs] launched directory tree driver (VFS)\n");
 }
 

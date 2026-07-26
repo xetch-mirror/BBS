@@ -1,5 +1,5 @@
 #include "decompressor.h"
-#include "init/sys_io.h"
+#include "sys_io.h"
 
 void decompress_init(decompress_ctx_t *ctx, const uint8_t *src, size_t src_size, uint8_t *dest, size_t dest_capacity) {
     if (!ctx) return;

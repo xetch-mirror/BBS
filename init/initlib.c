@@ -12,6 +12,9 @@ void initlib_boot_sequence(boot_stage_t target_stage) {
         case BOOT_STAGE_EARLY:
             io_print("[init] stage: early initialization\n");
             break;
+        case BOOT_STAGE_DRIVERS:
+            io_print("[init] stage: drivers loading\n");
+            break;
         case BOOT_STAGE_HEADERS:
             io_print("[init] stage: headers loading\n");
             break;

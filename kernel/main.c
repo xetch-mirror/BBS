@@ -20,6 +20,11 @@
 #define ATA_CMD  0x1F7
 #define SECTOR_SZ 512
 
+/* Raw ATA writes are disabled unless explicitly enabled for a controlled test disk. */
+#ifndef BBS_ENABLE_ATA_WRITES
+#define BBS_ENABLE_ATA_WRITES 0
+#endif
+
 static volatile uint16_t* const VGA_BUFFER = (uint16_t*)VGA_ADDR;
 static int vga_col = 0;
 static int vga_row = 0;
@@ -92,9 +97,17 @@ static int sda1_vfs_read(vfs_node_t *node, uint32_t offset, void *buf, uint32_t 
 
 static int sda1_vfs_write(vfs_node_t *node, uint32_t offset, const void *buf, uint32_t size) {
     (void)node;
+#if !BBS_ENABLE_ATA_WRITES
+    (void)offset;
+    (void)buf;
+    (void)size;
+    return -1;
+#else
+    if (!buf || size != SECTOR_SZ || (offset % SECTOR_SZ) != 0) return -1;
     uint32_t lba = offset / SECTOR_SZ;
     ata_write_sector(lba, (const uint8_t*)buf);
     return size;
+#endif
 }
 
 static vfs_ops_t sda1_ops = {

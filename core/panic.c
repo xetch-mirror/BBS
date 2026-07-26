@@ -1,5 +1,6 @@
 #include "panic_config.h"
-#include "xstring.h"
+#include "Clib/Xlibary/Xstring.h"
+#include <stdint.h>
 
 extern void serial_write(const char *str);
 

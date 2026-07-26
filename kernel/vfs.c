@@ -1,15 +1,11 @@
 #include "kernel/include/vfs.h"
 #include "include/ksubsys.h"
 #include "init/include/sys_io.h"
-#include "include/sys_string.h"
+#include "src/kshell/sys_string.h"
 
 extern void ksubsys_log(const ksubsys_t *subsys, const char *msg);
 DEFINE_SUBSYS(LOG_VFS, "vfs");
-
-static vfs_node_t vfs_nodes[VFS_MAX_NODES];
-static uint32_t node_count = 0;
-
-void vfs_init(void) {
+int vfs_init(void) {
     node_count = 0;
 
     // Root FHS directories
@@ -66,7 +62,7 @@ int vfs_exists(const char *path) {
 int vfs_mkdir(const char *path) {
     if (vfs_exists(path)) return 0;
     vfs_node_t node;
-    k_strncpy(node.name, path, VFS_MAX_PATH);
+    k_strncmp(node.name, path, VFS_MAX_PATH);
     node.size = 0;
     node.flags = VFS_DIRECTORY;
     node.inode_id = node_count + 1;

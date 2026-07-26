@@ -30,8 +30,10 @@ init_32bit:
     mov ss, ax
     mov esp, 0x90000        ; Set up stack pointer
 
-    extern entry_32bit      ; Defined in kernel_entry.asm
     jmp entry_32bit
+
+%include "disk.asm"
+%include "kernel_entry.asm"
 
 times 510 - ($ - $$) db 0
 dw 0xaa55

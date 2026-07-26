@@ -4,7 +4,6 @@
 #define EXT4FS_H
 
 #include "vfs.h"
-#include <ext4_types.h>
 
 void* ext4fs_mount_volume(void *disk_ptr);
 void ext4fs_umount_volume(void *fs_private);

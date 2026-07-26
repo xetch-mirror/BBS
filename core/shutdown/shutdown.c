@@ -1,9 +1,9 @@
 
-
 typedef unsigned char  uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int   uint32_t;
 typedef unsigned long  uint64_t;
+typedef unsigned int   uintptr_t;
 
 
 struct RSDPDescriptor {
@@ -132,7 +132,6 @@ void hardware_shutdown(void) {
     
     for (volatile int i = 0; i < 5000; i++);
 
-     is SLP_EN)
     uint16_t SLP_EN = 1 << 13;
     
     outw(global_fadt->PM1a_CntBlk, SLP_TYPa | SLP_EN);

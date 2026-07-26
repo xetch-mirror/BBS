@@ -1,5 +1,5 @@
 #include "sys_ipc.h"
-#include "init/sys_io.h"
+#include "sys_io.h"
 
 #define DISK_CMD_CREATE 0x01
 #define DISK_CMD_DELETE 0x02

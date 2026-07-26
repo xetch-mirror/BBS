@@ -7,7 +7,17 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "limine.h"
+
+typedef struct {
+    uint64_t base;
+    uint64_t length;
+    uint32_t type;
+} BBSMemoryRegion;
+
+typedef struct {
+    const BBSMemoryRegion *regions;
+    size_t count;
+} BBSMemoryMap;
 
 // SLAB_CLASSES and SLAB_MAX_SIZE must stay in sync with the slab_sizes[] table in memory_manager.c.
 #define DEFAULT_POOL_SIZE           (128 * 1024 * 1024)
@@ -41,7 +51,7 @@ typedef struct {
 
 // Must be called exactly once before any allocation. Idempotent if called again (no-op),
 // but re-initialisation after allocations have been made is not supported.
-void memory_manager_init_from_memmap(struct limine_memmap_response *memmap);
+void memory_manager_init_from_memmap(const BBSMemoryMap *memmap);
 
 void* kmalloc(size_t size);
 void* kcalloc(size_t n, size_t size);
