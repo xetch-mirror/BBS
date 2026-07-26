@@ -1,11 +1,11 @@
 #ifndef XIO_H
 #define XIO_H
 
-// Prevent any potential overlap with standard names by using your own clean hooks
+// overlap
 extern void kernel_print(const char* s);
 extern int kernel_read_kbd(char* buf, int max_len);
 
-// 100% Freestanding input/output definitions
+// 100%
 static inline void print(const char* s) {
     if (s != 0) {
         kernel_print(s);
@@ -21,4 +21,4 @@ static inline void print_char(char c) {
     kernel_print(buf);
 }
 
-#endif // INOU_H
+#endif // XIO_H
