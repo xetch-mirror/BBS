@@ -1,5 +1,5 @@
 #include "init/include/sys_io.h"
-#include "include/sys_string.h"
+#include "src/kshell/sys_string.h"
 #include "include/sudolib.h"
 #include "include/userlib.h"
 

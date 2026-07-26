@@ -5,7 +5,11 @@
 
 extern void ksubsys_log(const ksubsys_t *subsys, const char *msg);
 DEFINE_SUBSYS(LOG_VFS, "vfs");
-int vfs_init(void) {
+
+static vfs_node_t vfs_nodes[VFS_MAX_NODES];
+static uint32_t node_count = 0;
+
+void vfs_init(void) {
     node_count = 0;
 
     // Root FHS directories
@@ -62,7 +66,7 @@ int vfs_exists(const char *path) {
 int vfs_mkdir(const char *path) {
     if (vfs_exists(path)) return 0;
     vfs_node_t node;
-    k_strncmp(node.name, path, VFS_MAX_PATH);
+    k_strncpy(node.name, path, VFS_MAX_PATH);
     node.size = 0;
     node.flags = VFS_DIRECTORY;
     node.inode_id = node_count + 1;
@@ -75,9 +79,11 @@ void vfs_list_dir(const char *path) {
     io_print("  TYPE     INODE    NAME\n");
     io_print("  -----------------------------------\n");
     for (uint32_t i = 0; i < node_count; i++) {
-        if (vfs_nodes[i].flags & VFS_DIRECTORY)      io_print("  [DIR]   ");
-        else if (vfs_nodes[i].flags & VFS_BLOCKDEV) io_print("  [DEV]   ");
-        else                                        io_print("  [FILE]  ");
+        if (vfs_nodes[i].flags & VFS_DIRECTORY) {
+            io_print("  [DIR]   ");
+        } else {
+            io_print("  [FILE]  ");
+        }
 
         io_print("  ");
         io_print(vfs_nodes[i].name);
