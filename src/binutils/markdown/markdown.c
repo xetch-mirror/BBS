@@ -8,8 +8,12 @@
 #define COLOR_QUOTE   "\033[32m"
 
 void markdown_render_line(const char *line) {
+    if (!line) return;
+
+    // skip all HTML AND XML NOW
     if (line[0] == '<') return;
 
+    // blockquote
     if (line[0] == '>' && line[1] == ' ') {
         kernel_print(COLOR_QUOTE);
         kernel_print("│ ");
@@ -19,33 +23,38 @@ void markdown_render_line(const char *line) {
         return;
     }
 
+    // headers
     if (line[0] == '#') {
         int level = 0;
         while (line[level] == '#') level++;
         if (line[level] == ' ') {
             kernel_print(COLOR_HEADER);
-            kernel_print(line + level + 1);
+            kernel_print(line + level + 1); // safely skips all 1s 
             kernel_print(COLOR_RESET);
             kernel_print("\n");
             return;
         }
     }
 
+    // unordered lists
     if ((line[0] == '*' || line[0] == '-') && line[1] == ' ') {
         kernel_print("  • ");
         line += 2;
     }
 
+    // parse code and bold
     const char *p = line;
     int bold = 0, code = 0;
 
     while (*p) {
+        // skip html tags
         if (*p == '<') {
             while (*p && *p != '>') p++;
             if (*p == '>') p++;
             continue;
         }
 
+        // bold
         if (*p == '*' && *(p + 1) == '*') {
             bold = !bold;
             kernel_print(bold ? COLOR_BOLD : COLOR_RESET);
@@ -53,6 +62,7 @@ void markdown_render_line(const char *line) {
             continue;
         }
 
+        // inlines
         if (*p == '`') {
             code = !code;
             kernel_print(code ? COLOR_CODE : COLOR_RESET);
